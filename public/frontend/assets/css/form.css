@@ -1,0 +1,25 @@
+#form_main {
+    position: relative;
+    margin-top: 20px;
+    background-color: rgba(245, 245, 245, 0.5);
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#form_main_content {
+    padding: 5px;
+    /* box-shadow: 1px 1px 5px 1px gray; */
+    margin-bottom: 20px;
+}
+
+
+#form_main_content button {
+    width: 200px;
+    background-color: #173a52;
+    outline: none;
+    margin-bottom: 20px;
+    color: white;
+    border: none;
+    padding: 5px;
+    font-size: 16px;
+}
