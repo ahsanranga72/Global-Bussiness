@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Registration;
 use Illuminate\Http\Request;
+use Response;
 
 class HomeController extends Controller
 {
@@ -43,11 +44,16 @@ class HomeController extends Controller
         $data->Whatsapp = $req->Whatsapp;
         $data->project_name = $req->project_name;
         $data->location = $req->location;
+        $data->lenth = $req->lenth;
+        $data->location = $req->location;
+        $data->width = $req->width;
         $data->service_res = $req->service_res;
         $data->tasf = $req->tasf;
         $data->totalcost = $req->totalcost;
         $data->costpersf = $req->costpersf;
+        
         $data->save();
+
     }
 
     public function productlist(){

@@ -1,5 +1,11 @@
 @extends('frontend.layouts.master')
 @section('content')
+@if(Session::has('message'))
+<div class="alert alert-success" role="alert">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{Session::get('message')}}
+</div>
+@endif
 <br>
 <br>
 <br>
@@ -59,6 +65,29 @@
                     </div>
                     <br>
                     <div class="row">
+                        <div class="col-md-6">
+                            <label for="lenth">Lenth *</label>
+                            <div class="input-group" style="width: 100%;">
+                                <!-- <span class="input-group-addon" id="length_in_m"></span> -->
+                                <input type="number" id="lenth" name="lenth" class="form-control lenth" placeholder="Enter Lenth" style="width: 100%;" aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="width">Width *</label>
+                            <div class="input-group" style="width: 100%;">
+                                <!-- <span class="input-group-addon" id="length_in_m"></span> -->
+                                <input type="number" id="width" name="width" class="form-control width" placeholder="Enter width" style="width: 100%;" aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="tasf">Total area in sft</label>
+                            <div class="input-group ta" style="width: 100%;">
+
+                            </div>
+                        </div>
                         <div class="col-md-6" class="form-control">
                             <label for="service_res">Service Reserve*</label>
                             <select class="form-control abc" name="service_res" id="service_res">
@@ -75,21 +104,9 @@
                                 <option value="Other Report" a="110" selected>Other Report</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label for="tasf">Total area in sft *</label>
-                            <div class="input-group ta" style="width: 100%;">
-                                <!-- <span class="input-group-addon" id="length_in_m"></span> -->
-                                <input type="number" id="tasf" name="tasf" class="form-control tasf" placeholder="Total area in sft" style="width: 100%;" aria-describedby="basic-addon2">
-                            </div>
-                        </div>
                     </div>
                     <br>
                     <div class="row efg">
-                        <div class="col-md-6">
-                            <label for="tcpsf">Cost Per/SFT</label>
-                            <div class="input-group tcpsf" id="tcpsf" style="width: 100%;">
-                            </div>
-                        </div>
                         <div class="col-md-6 hij">
                             <label for="tc">Total Cost</label>
                             <div class="input-group totalcost" id="tc" name="tc" style="width: 100%;">
@@ -99,44 +116,47 @@
                     <br>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="row" id="area_of_expertise">
 
-                                <div class="col-md-12">
-                                    <button type="submit">Submit</button>
-                                </div>
-                            </div>
+                            <button type="submit">Submit</button>
+
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2"></div>
             </div>
         </form>
-
     </div>
 </section>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.abc').on('change', function() {
-            var value = $('.abc').find(":selected").attr('a');
+        //on input lenth calculation
+        $('.lenth').on('keyup', function() {
+            var lenth = $(this).val()
+            var width = $('.width').val()
 
-            $('.efg').find('.tcpsf').text(value)
+            var total = lenth * width
 
-            var abc = $('.ta').find('.tasf').val()
-            value = parseFloat(value)
-            var total = value * abc
-
-
-            $('.hij').find('.totalcost').text(total)
+            $('.ta').text(total)
         })
+        //on input width calculation
+        $('.width').on('keyup', function() {
+            var width = $(this).val()
+            var lenth = $('.lenth').val()
 
-        $('.ta').find('.tasf').on('keyup', function() {
-            var value = $(this).val()
-            var abc = $('.abc').find(":selected").attr('a');
+            var total = lenth * width
 
-            abc = parseFloat(abc)
+            $('.ta').text(total)
+        })
+        //change service reserve calculation
+        $('.abc').on('change', function() {
+            var sr = $('.abc').find(":selected").attr('a');
+            var ta = $('.ta').text()
 
-            var total = value * abc
+            sr = parseFloat(sr)
+            ta = parseFloat(ta)
+
+            var total = sr * ta
+
 
             $('.hij').find('.totalcost').text(total)
         })
@@ -148,10 +168,12 @@
             var Whatsapp = $('#Whatsapp').val()
             var project_name = $('#project_name').val()
             var location = $('#location').val()
+            var lenth = $('#lenth').val()
+            var width = $('#width').val()
             var service_res = $('#service_res').val()
-            var tasf = $('#tasf').val()
+            var tasf = parseFloat($('.ta').text())
             var totalcost = parseFloat($('.hij').find('.totalcost').text())
-            var costpersf = parseFloat($('.tcpsf').text())
+            var costpersf = parseFloat(totalcost / tasf)
             $.ajax({
                 url: "{{ route('storeregistration') }}",
                 method: "post",
@@ -161,6 +183,8 @@
                     Whatsapp,
                     project_name,
                     location,
+                    lenth,
+                    width,
                     service_res,
                     tasf,
                     totalcost,
@@ -168,8 +192,7 @@
                     _token: '{{csrf_token()}}'
                 },
                 success: function(data) {
-
-                    alert(data)
+                    console.log(data)
                 }
             })
         });

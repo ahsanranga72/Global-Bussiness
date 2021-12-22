@@ -20,6 +20,8 @@ class CreateRegistrationsTable extends Migration
             $table->string("Whatsapp")->nullable();
             $table->string("project_name")->nullable();
             $table->string("location")->nullable();
+            $table->string("lenth")->nullable();
+            $table->string("width")->nullable();
             $table->string("service_res")->nullable();
             $table->string("tasf")->nullable();
             $table->string("costpersf")->nullable();
